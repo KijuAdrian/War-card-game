@@ -1,0 +1,149 @@
+import pygame
+import random
+pygame.init()
+
+screen = pygame.display.set_mode((1885,800))
+pygame.display.set_caption("Card Game: War")
+class card:
+    def __init__(self,number,suit,cardxpos1,cardypos1,cardxpos2,cardypos2):#;-;
+        self.cardxpos1=cardxpos1
+        self.cardypos1=cardypos1
+        self.cardxpos2=cardxpos2
+        self.cardypos2=cardypos2
+        self.number=number
+        self.suit=suit
+        self.alive=True
+    def draw(self):
+        if self.alive==True:
+            pygame.draw.rect(screen,(255,255,255),(self.cardxpos1,self.cardypos1,self.cardxpos2,self.cardypos2))
+            text0= font.render('Heart', False, (255, 0, 0))
+            text1= font.render('Diamond', False, (255, 0, 0))
+            text2= font.render('Spade', False, (0, 0, 0))
+            text3= font.render('Club', False, (0, 0, 0))
+            text5= font.render(str(int(self.number)), False, (0, 0, 0))
+            text6= font.render(str(int(self.number)), False, (255, 0, 0))
+            if self.suit==0:
+                screen.blit(text0, (self.cardxpos1,self.cardypos1))
+                screen.blit(text6, (self.cardxpos1+self.cardxpos2-32,self.cardypos1+self.cardypos2-32))
+            if self.suit==1:
+                screen.blit(text1, (self.cardxpos1,self.cardypos1))
+                screen.blit(text6, (self.cardxpos1+self.cardxpos2-32,self.cardypos1+self.cardypos2-32))
+            if self.suit==2:
+                screen.blit(text2, (self.cardxpos1,self.cardypos1))
+                screen.blit(text5, (self.cardxpos1+self.cardxpos2-32,self.cardypos1+self.cardypos2-32))
+            if self.suit==3:
+                screen.blit(text3, (self.cardxpos1,self.cardypos1))
+                screen.blit(text5, (self.cardxpos1+self.cardxpos2-32,self.cardypos1+self.cardypos2-32))
+            pygame.draw.rect(screen,(0,0,0),(self.cardxpos1,self.cardypos1,self.cardxpos2,self.cardypos2),3)
+    def drawp(self,a1,b1,a2,b2):
+        if self.alive==True:
+            pygame.draw.rect(screen,(255,255,255),(a1,b1,a2,b2))
+            text0= font.render('Heart', False, (255, 0, 0))
+            text1= font.render('Diamond', False, (255, 0, 0))
+            text2= font.render('Spade', False, (0, 0, 0))
+            text3= font.render('Club', False, (0, 0, 0))
+            text5= font.render(str(int(self.number)), False, (0, 0, 0))
+            text6= font.render(str(int(self.number)), False, (255, 0, 0))
+            if self.suit==0:
+                screen.blit(text0, (a1,b1))
+                screen.blit(text6, (a1+a2-32,b1+b2-32))
+            if self.suit==1:
+                screen.blit(text1, (a1,b1))
+                screen.blit(text6, (a1+a2-32,b1+b2-32))
+            if self.suit==2:
+                screen.blit(text2, (a1,b1))
+                screen.blit(text5, (a1+a2-32,b1+b2-32))
+            if self.suit==3:
+                screen.blit(text3, (a1,b1))
+                screen.blit(text5, (a1+a2-32,b1+b2-32))
+            pygame.draw.rect(screen,(0,0,0),(a1,b1,a2,b2),3)
+  #def define(self):
+            
+deck=list()
+for j in range (4):
+    for i in range (13):
+        deck.append(card(i,j,i*145,j*200,145,200))
+        
+random.shuffle(deck)
+p1hand=list()
+p2hand=list()
+p1gain=list()
+p2gain=list()
+for j in range (0,26):
+    p1hand.append(deck[j])
+for i in range (26,52):
+    p2hand.append(deck[i])
+print(p2hand)
+    
+#prints idk
+num = [0,0,0,0]
+num[0] += 1
+print(num[0])
+b=random.randint(1,4)
+num[1] += 1
+print(num[1])
+c=random.randint(1,13)
+num[2] += 1
+print(num[2])
+d=random.randint(1,4)
+num[3] += 1
+print(num[3])
+
+font= pygame.font.Font('freesansbold.ttf', 32)
+turn=False
+doExit=False
+tick = pygame.time.Clock()
+discard1=list()
+discard2=list()
+
+while True:
+    tick.tick(60)
+    screen.fill((0,150,0))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            doExit = True
+    if event.type==pygame.MOUSEMOTION:
+        mousePos=event.pos
+    #if event.type == pygame.MOUSEBUTTONDOWN:
+        #a=random.randint(0,26)
+        #discard1.append(p1hand[a])
+    if event.type == pygame.MOUSEBUTTONUP:
+        turn=False
+    keys = pygame.key.get_pressed()
+    if event.type==pygame.MOUSEBUTTONDOWN:
+        turn=True
+    if len(p1hand)<=0 or len(p2hand)<=0:
+        doExit=True
+        if len(discard1)>len(discard2):
+            print("player 1 wins")
+        else:
+            print("player 2 wins")
+    if turn and len(p2hand)>0 and len(p1hand)>0:
+        if p1hand[len(p1hand)-1].number>p2hand[len(p2hand)-1].number:
+            discard1.append(p1hand[len(p1hand)-1])
+            discard1.append(p2hand[len(p2hand)-1])
+            p1hand.pop(len(p1hand)-1)
+            p2hand.pop(len(p2hand)-1)
+    if turn and len(p1hand)>0 and len(p2hand)>0:
+        if p2hand[len(p2hand)-1].number>p1hand[len(p1hand)-1].number:
+            discard2.append(p1hand[len(p1hand)-1])
+            discard2.append(p2hand[len(p2hand)-1])
+            p1hand.pop(len(p1hand)-1)
+            p2hand.pop(len(p2hand)-1)
+    pygame.draw.rect(screen,(255,0,0),(840,100,145,200))
+    #pygame.draw.rect(screen,(255,0,0),(840,500,145,200))
+    for i in range (0,len(p1hand)):
+        p1hand[i].drawp(840,100,145,200)
+    for i in range (0,len(p2hand)):
+        p2hand[i].drawp(840,500,145,200)
+    for i in range (0,len(discard1)):
+        discard1[i].drawp(985+i*10,200,145,200)
+    for i in range (0,len(discard2)):
+        discard2[i].drawp(695-i*10,400,145,200)
+    pygame.draw.rect(screen,(255,0,0),(840,100,145,200))
+    pygame.draw.rect(screen,(255,0,0),(840,500,145,200))
+    
+
+        
+    pygame.display.flip()
+pygame.quit()
